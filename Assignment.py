@@ -8,11 +8,12 @@ surname_name = input("Enter your surname? ")
 
 score = 0
 result = 0
+feedback = ""
 q_asked = 1
 
-f = open(f"feedback.txt", "w")  # open filename, access mode
-print(f"First Name: {first_name}", file=f)
-print(f"Surname Name: {surname_name}", file=f)
+f = open(f"logs.txt", "w")  # open filename, access mode
+print(f"First Name: {first_name} - ", file=f)
+print(f"Surname Name: {surname_name} - ", file=f)
 f.close()
 
 num_math_q = int(input(f"\n{first_name} how many questions? "))
@@ -24,25 +25,26 @@ for a in range(num_math_q):
     print(f"{q_asked}:", random_num_one, "+", random_num_two, "= ", end="")
     rand_math_ans = random_num_one + random_num_two
     user_ans = int(input(""))
+    feedback += f"\n{q_asked}: {random_num_one} + {random_num_two} = {user_ans}"
+
+
+    # if = to + then
+    # elif = to - then
 
     if rand_math_ans == user_ans:
         score += 1
+        feedback += f" Correct"
     else:
-        if q_asked == 5:
-            print(f"should be {rand_math_ans}")
+        feedback += f" Incorrect, should be {rand_math_ans}"
 
+    percentage = score / q_asked * 100
     q_asked += 1
 
-    for b in range(num_math_q):
-        q_asked = 1
-
-        print(f"\nFeedback:")
-
-        print(f"\n{q_asked}:", random_num_one, "+", random_num_two, "=", user_ans, end="")
-
+    if q_asked > num_math_q:
+        print("\nFeedback:")
         if rand_math_ans == user_ans:
-            print(" Correct")
+            print(f"{feedback}")
         else:
-            print(f" Incorrect, Should be {rand_math_ans}")
+            print(f"{feedback}")
 
-print(f"\n{first_name} you got {score}/{q_asked - 1}")
+print(f"\n{first_name}, you got {score}/{q_asked - 1}: {percentage}")
