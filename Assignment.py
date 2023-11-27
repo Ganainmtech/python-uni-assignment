@@ -116,6 +116,9 @@ while user_finished == 'no':
             print(f"{feedback_lang}")
 
         print(f"\nResult: {score}/3\n{first_name}, you got {percentage:,.0f}% \U0001F389")
+
         if percentage > 70:
-            print(f"The next time you use this program you should start with level 2")
+            if user_level < 5:
+                print(f"The next time you use this program you should start with level {user_level + 1}")
         connection.close()
+
