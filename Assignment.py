@@ -59,21 +59,20 @@ while user_finished == 'no':
 
             # Calculate the score percentage and add 1 to questions asked count
             percentage = score / num_math_q
-            percentage_total = percentage
             q_asked += 1
 
         # If the questions are finished print the feedback from the quiz
         if q_asked > num_math_q:
-            print("\nFeedback:")
+            print("Feedback:")
             if rand_math_ans == user_ans:
                 print(f"{feedback_math}")
             else:
                 print(f"{feedback_math}")
         print(f"\n{first_name}, you got {percentage:.0%} \U0001F389")
 
-        percentage_avg = percentage_total / quiz_count
-
         print(f"{first_name} {surname_name} - MATHS - {date} : {percentage:.0%}", file=f)
+
+        percentage_total += percentage
 
         user_finished = input(f"Are you finished? (yes/no)")
 
@@ -117,7 +116,6 @@ while user_finished == 'no':
                 feedback_lang += f" \u274C should be {polish_word}"
 
             percentage = score / 3
-            percentage_total = percentage
 
         # If the questions are finished print the feedback from the quiz
         print("\nFeedback:")
@@ -132,13 +130,15 @@ while user_finished == 'no':
                 print(f"The next time you use this program you should start with level {user_level + 1}")
         connection.close()
 
-        percentage_avg = percentage_total / quiz_count
-
         print(f"{first_name} {surname_name}-{lang_level}-{date}: {percentage:.0%}", file=f)
+
+        percentage_total += percentage
+
         user_finished = input(f"Are you finished? (yes/no)\n")
 
+percentage_avg = percentage_total / quiz_count
 
-print(f"Your average score for all quiz is {percentage_avg:.0%}"
+print(f"\nYour average score for all quiz is {percentage_avg:.0%}"
       f"\nYour teacher can view details in log.txt")
 
 f.close()
