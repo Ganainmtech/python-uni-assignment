@@ -4,25 +4,29 @@
 import random
 import datetime
 
+# Gathering user input and setting date variable
 first_name = input("Enter your first name? ")
 surname_name = input("Enter your surname? ")
 date = datetime.date.today()
 
+# Setting global variables
 result = 0
-feedback_lang = ""
-lang_level = ""
-feedback_math = ""
+rand_math_ans = 0
+user_ans = 0
+user_word = 0
+polish_word = 0
 quiz_count = 0
 percentage = 0
 percentage_total = 0
+feedback_lang = ""
+lang_level = ""
+feedback_math = ""
 user_finished = 'no'
 
 f = open(f"logs.txt", "w")  # open filename, access mode
-
 print(f"Welcome {first_name}")
 
 while user_finished == 'no':
-
     # Get user choice of quiz
     print(f"\n1: Maths"
           f"\n2: Polish")
@@ -71,9 +75,7 @@ while user_finished == 'no':
         print(f"\n{first_name}, you got {percentage:.0%} \U0001F389")
 
         print(f"{first_name} {surname_name} - MATHS - {date} : {percentage:.0%}", file=f)
-
         percentage_total += percentage
-
         user_finished = input(f"Are you finished? (yes/no)")
 
     elif user_choice == 2:
@@ -105,7 +107,6 @@ while user_finished == 'no':
 
             print(f"{english_word} = ")
             user_word = input("")
-
             feedback_lang += f"\n{english_word} = {user_word}"
 
             # Add to score and finished the string output
@@ -114,7 +115,6 @@ while user_finished == 'no':
                 feedback_lang += f" \u2705"
             else:
                 feedback_lang += f" \u274C should be {polish_word}"
-
             percentage = score / 3
 
         # If the questions are finished print the feedback from the quiz
@@ -123,21 +123,18 @@ while user_finished == 'no':
             print(f"{feedback_lang}")
         else:
             print(f"{feedback_lang}")
-        print(f"\nResult: {score}/3\n{first_name}, you got {percentage:.0%} \U0001F389")
 
-        if percentage > 70:
+        if percentage * 100 > 70:
             if user_level < 5:
                 print(f"The next time you use this program you should start with level {user_level + 1}")
+        print(f"\nResult: {score}/3\n{first_name}, you got {percentage:.0%} \U0001F389")
         connection.close()
 
         print(f"{first_name} {surname_name}-{lang_level}-{date}: {percentage:.0%}", file=f)
-
         percentage_total += percentage
-
         user_finished = input(f"Are you finished? (yes/no)\n")
 
 percentage_avg = percentage_total / quiz_count
-
 print(f"\nYour average score for all quiz is {percentage_avg:.0%}"
       f"\nYour teacher can view details in log.txt")
 
