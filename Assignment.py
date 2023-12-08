@@ -10,21 +10,15 @@ CONTENT = f"\U0001F60A"
 VERY_GOOD = f"\U0001F44D"
 PERFECT = f"\U0001F389"
 
-# Gathering user input and setting the date variables
+# Gathering user input
 first_name = input("Enter your first name? ")
 surname_name = input("Enter your surname? ")
-datetime = datetime.datetime.now()
-month = datetime.strftime("%B")
-num_date = datetime.strftime("%d")
-year = datetime.strftime("%Y")
-timestamp = datetime.strftime("%H:%M")
-date = f"{month} {num_date}, {year}"
 
 # Setting global variables
 result = 0
 rand_math_ans = 0
 user_ans = -1
-user_word = 0
+user_word = ""
 polish_word = 0
 quiz_count = 0
 percentage = 0
@@ -36,7 +30,7 @@ user_finished = 'no'
 user_validate = 'yes', 'no'
 emoji = ""
 
-f = open(f"logs.txt", "a")  # open filename, continue writing
+f = open(f"logs.txt", "a")  # open filename, continue writing into file
 print(f"Welcome {first_name}")
 
 while user_finished == 'no':
@@ -46,12 +40,20 @@ while user_finished == 'no':
     user_choice = int(input(">>> "))
 
     if user_choice == 1:
+        # Setting up the time, each time a student takes a test update date and time
+        dt = datetime.datetime.now()
+        month = dt.strftime("%B")
+        num_date = dt.strftime("%d")
+        year = dt.strftime("%Y")
+        timestamp = dt.strftime("%H:%M")
+        date = f"{month} {num_date}, {year} {timestamp}"
+
         q_asked = 1
         quiz_count += 1
         score = 0
         num_math_q = int(input(f"\n{first_name} how many questions? "))
         while num_math_q < 5 or num_math_q > 25:
-            num_math_q = int(input(f"\n{first_name} how many questions? (min 5/max25) "))
+            num_math_q = int(input(f"\n{first_name} how many questions?(min5/max25) "))
         for a in range(num_math_q):
             user_ans = -1
             random_num_one = random.randint(1, 12)
@@ -110,18 +112,26 @@ while user_finished == 'no':
         else:
             emoji = PERFECT
         print(f"\n{first_name}, you got {percentage:.0%} {emoji}\n")
-        print(f"{first_name} {surname_name} - MATHS - {date} {timestamp}: {percentage:.0%}", file=f)
+        print(f"{first_name} {surname_name} - MATHS - {date}: {percentage:.0%}", file=f)
         percentage_total += percentage
+        feedback_math = ""
 
         user_finished = input(f"Are you finished? (yes/no) ")
         while user_finished not in user_validate:
             user_finished = input(f"Are you finished? (yes/no) ")
 
     elif user_choice == 2:
+        dt = datetime.datetime.now()
+        month = dt.strftime("%B")
+        num_date = dt.strftime("%d")
+        year = dt.strftime("%Y")
+        timestamp = dt.strftime("%H:%M")
+        date = f"{month} {num_date}, {year} {timestamp}"
+
         quiz_count += 1
         score = 0
+        # Open language level file student inputs and store in a variable
         user_level = int(input(f"What is your current level {first_name}? "))
-
         if user_level == 1:
             connection = open("Polish1.txt", "r")
             lang_level = "POLISH1"
@@ -139,13 +149,17 @@ while user_finished == 'no':
             lang_level = "POLISH5"
 
         for word in connection:
+            user_word = ""
             word = word.rstrip()
             word = word.split(",")
             english_word = word[0]
             polish_word = word[1]
 
             print(f"{english_word} = ", end="")
-            user_word = input("")
+            while not str(user_word):
+                user_word = input("")
+                if user_word == "":
+                    print("You must give an answer. Try again: ")
             feedback_lang += f"\n{english_word} = {user_word}"
 
             # Add to score and finished the string output
@@ -154,7 +168,7 @@ while user_finished == 'no':
                 feedback_lang += f" \u2705"
             else:
                 feedback_lang += f" \u274C should be {polish_word}"
-            percentage = score / 3
+            percentage = score / 5
 
         # If the questions are finished print the feedback from the quiz
         if user_word == polish_word:
@@ -174,18 +188,21 @@ while user_finished == 'no':
             emoji = VERY_GOOD
         else:
             emoji = PERFECT
-        print(f"\nResult: {score}/3\n{first_name}, you got {percentage:.0%} {emoji}\n")
+        print(f"\nResult: {score}/5\n{first_name}, you got {percentage:.0%} {emoji}\n")
         connection.close()
 
-        print(f"{first_name} {surname_name} - {lang_level} - {date} {timestamp}: {percentage:.0%}", file=f)
+        print(f"{first_name} {surname_name} - {lang_level} - {date}: {percentage:.0%}", file=f)
         percentage_total += percentage
+        feedback_lang = ""
 
         user_finished = input(f"Are you finished? (yes/no) ")
         while user_finished not in user_validate:
             user_finished = input(f"Are you finished? (yes/no) ")
 
+# Calculate the average of all the quiz percentages that were taken by the student
 percentage_avg = percentage_total / quiz_count
 print(f"\nYour average score for all quiz is {percentage_avg:.0%}"
       f"\nYour teacher can view details in log.txt")
 
 f.close()
+
